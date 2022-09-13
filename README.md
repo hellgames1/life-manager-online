@@ -18,6 +18,11 @@ How to setup:
 10. The setup procedure will begin on the terminal where you've run the server, follow the prompts
 11. Done!
 
+I suck at front-end. I can't be bothered to make responsive design, so currently this application
+does not display properly on a horizontal widescreen display. Also it's only tested on Chrome.
+If you want to see it correctly, either adjust your Chrome window so it's in vertical aspect ratio,
+or right-click, Inspect, and press on the tablet/smartphone icon on the top left.
+
 
 If you want to be able to access this remotely (from mobile network or another Wi-Fi),
 set up port forwarding in your router settings with the port 8000 and your local IP.
