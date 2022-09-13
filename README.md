@@ -12,7 +12,7 @@ How to setup:
 4. Change ALLOWED_HOSTS to whatever your local IP is
 5. Go to directory /lmoproject/ and open terminal
 6. Run python manage.py makemigrations
-7. Run python manage.py migrate
+7. Run python manage.py migrate --run-syncdb
 8. Run python manage.py runserver 192.168.0.104:8000 where you replace the IP with your local one
 9. Go to http://192.168.0.104:8000/setup (again replacing it with your IP)
 10. The setup procedure will begin on the terminal where you've run the server, follow the prompts
