@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+	<head>
+		<style type="text/css">
+			#calendar {
+				user-select: none;
+				border: 1px solid black;
+				position: absolute;
+				top: 50%;
+				left: 0px;
+				width:100%;
+				height:50%;
+				overflow-y: scroll;
+			}
+			.day {
+				display: inline-block;
+				box-sizing: border-box;
+				vertical-align:middle;
+				border: 1px solid black;
+				width: 14%;
+				height: 0;
+				padding-bottom: 14.2857%;
+				margin-right: -4px;
+				text-align: center;
+				position: relative;
+				
+			}
+			.daytoday {
+				display: inline-block;
+				box-sizing: border-box;
+				box-shadow:inset 0px 0px 0px 5px red;
+				vertical-align:middle;
+				border: 1px solid red;
+				width: 14%;
+				height: 0;
+				padding-bottom: 14.2857%;
+				margin-right: -4px;
+				text-align: center;
+				position: relative;
+				
+			}
+			.daysel {
+				display: inline-block;
+				box-sizing: border-box;
+				vertical-align:middle;
+				border: 1px solid black;
+				width: 14%;
+				height: 0;
+				padding-bottom: 14.2857%;
+				margin-right: -4px;
+				text-align: center;
+				background-color: red;
+				position: relative;
+			}
+			.daytext {
+				position: relative;
+				display: inline;
+				font-family: Calibri;
+				font-size: 80px;
+				color: black;
+				text-decoration: none;
+			}
+			.daymonthtext {
+				position: relative;
+				display: inline;
+				font-family: Calibri;
+				font-size: 20px;
+				text-align: center;
+				color: black;
+				text-decoration: none;
+			}
+			.notestar {
+				color: orange;
+				position: absolute;
+				right: 4px;
+				top: 0px;
+				font-family: Calibri;
+				font-size: 36pt;
+			}
+			#details {
+				position: absolute;
+				top: 90px;
+				left: 0px;
+				width: 100%;
+				text-align: center;
+				overflow-y: scroll;
+				height: calc(50% - 90px);
+			}
+			.datetitle {
+				font-family: Calibri;
+				font-size: 80px;
+			}
+			.datenotes {
+				font-family: Calibri;
+				font-size: 40px;
+			}
+			td {
+				width: 50%;
+			}
+			#header {
+				position: absolute;
+				top:0px;
+				left:0px;
+				width:100%;
+				background-color: gray;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>{% load static %}
+		<div id="header"><a style="color: white; font-family: Calibri; font-size: 36pt;">Calendar</a></div>
+		<div id="details">
+			<a class="datetitle">{{now}}</a><br />
+			<a class="datenotes">{{notes}}</a><br /><br /><br /><br /><br /><br />
+			<table style=" width: 100%; text-align: left; font-family: Calibri; font-size: 40px; ">
+				<tr>
+				<td>money spent: 15.02lv</td>
+				<td>brushed teeth: 2</td>
+				</tr>
+				<tr>
+				<td>money spent: 15.02lv</td>
+				<td>brushed teeth: 2</td>
+				</tr>
+				<tr>
+				<td>money spent: 15.02lv</td>
+				<td>brushed teeth: 2</td>
+				</tr>
+				<tr>
+				<td>money spent: 15.02lv</td>
+				<td>brushed teeth: 2</td>
+				</tr>
+				<tr>
+				<td>money spent: 15.02lv</td>
+				<td>brushed teeth: 2</td>
+				</tr>
+				<tr>
+				<td>money spent: 15.02lv</td>
+				<td>brushed teeth: 2</td>
+				</tr>
+				<tr>
+				<td>money spent: 15.02lv</td>
+				<td>brushed teeth: 2</td>
+				</tr>
+				<tr>
+				<td>money spent: 15.02lv</td>
+				<td>brushed teeth: 2</td>
+				</tr>
+				<tr>
+				<td>money spent: 15.02lv</td>
+				<td>brushed teeth: 2</td>
+				</tr>
+				<tr>
+				<td>money spent: 15.02lv</td>
+				<td>brushed teeth: 2</td>
+				</tr>
+			</table>
+		</div>
+		<a href="/"><img src='{% static "x.png" %}' style="position: absolute; left: 0px; top: 90px; width: 180px;" /></a>
+		{% if nottoday %}
+		<a href="/?v={{descr}}"><img src='{% static "n.png" %}' style="position: absolute; right: 0px; top: 90px; width: 180px;" /></a>
+		{% endif %}
+		<div id="calendar">
+			{% for day in days %}
+			{% if day.selected %}
+			<div class="daysel" onclick="gotoday('{{day.descr}}', true);"><a class="daytext" style="color:white;">{{day.date}}</a><br /><a class="daymonthtext" style="color:white;">{{day.month_verbose}}</a>
+			{% else %}
+			{% if day.today %}
+			<div class="daytoday" onclick="gotoday('{{day.descr}}', false);"><a class="daytext">{{day.date}}</a><br /><a class="daymonthtext">{{day.month_verbose}}</a>
+			{% else %}
+			<div class="day" onclick="gotoday('{{day.descr}}', true);"><a class="daytext">{{day.date}}</a><br /><a class="daymonthtext">{{day.month_verbose}}</a>
+			{% endif %}
+			{% endif %}
+			{% if day.note %}
+			<a class="notestar">*</a>
+			{% endif %}
+			</div>
+			{% endfor %}
+		</div>
+	<script type="text/javascript">
+		let scroll_to_bottom = document.getElementById('calendar');
+		{% if scrollto %}
+		scroll_to_bottom.scrollTop = {{scrollto}};
+		{% endif %}
+		function gotoday(x,addday){
+			if (addday) {
+				window.location.href = "/calendar/?calday="+x+"&y="+scroll_to_bottom.scrollTop.toString()
+			} else {
+				window.location.href = "/calendar/?y="+scroll_to_bottom.scrollTop.toString()
+			}
+			
+		}
+	</script>
+	</body>
+</html>

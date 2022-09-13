@@ -1,0 +1,249 @@
+<!doctype html>
+<html>
+	<head>
+		<style type="text/css">
+			#details {
+				position: absolute;
+				top: 90px;
+				left: 0px;
+				width: 100%;
+				height: 180px;
+				text-align: center;
+				overflow-y: scroll;
+			}
+			.datetitle {
+				font-family: Calibri;
+				font-size: 80px;
+			}
+			.datenotes {
+				font-family: Calibri;
+				font-size: 40px;
+			}
+			#fields {
+				position: absolute;
+				border: 1px solid black;
+				top: 360px;
+				left: 0px;
+				width: 100%;
+				height: calc(100% - 360px);
+				overflow-y: scroll;
+			}
+			#fieldobj {
+				top: 0px;
+				left: 0px;
+				width: 100%;
+				height: 135px;
+			}
+			.fieldname {
+				font-family: Calibri;
+				vertical-align: top;
+				font-size: 48px;
+				position: relative;
+				top: 30px;
+			}
+			.intvalue {
+				font-family: Calibri;
+				font-size: 54px;
+			}
+			.fieldnamespan {
+				position: relative;
+				display: inline-block;
+				top: 0px;
+				width: calc(100% - 405px);
+				height: 135px;
+				vertical-align: top;
+				text-align: center;
+			}
+			.minusbutton {
+				margin-left: -4px;
+				width: 135px;
+				opacity: 0.25;
+			}
+			.plusbutton {
+				width: 135px;
+				opacity: 0.25;
+			}
+			.editbutton {
+				width: 135px;
+				margin-left: 131px;
+				opacity: 0.25;
+			}
+			.fieldspan {
+				position: relative;
+				display: inline-block;
+				top: 0px;
+				width: 135px;
+				height: 135px;
+				vertical-align: top;
+			}
+			.field2span {
+				position: relative;
+				display: inline-block;
+				top: 0px;
+				width: 135px;
+				height: 135px;
+				vertical-align: top;
+			}
+			.intform {
+				font-family: Calibri;
+				font-size: 54px;
+				width: 152px;
+				height: 90px;
+				margin-top: -12px;
+				margin-left: 115px;
+				text-align: center;
+				border: 7px solid #bfbfbf;
+				border-radius: 20px;
+				background: transparent;
+			}
+			#header {
+				position: absolute;
+				top:0px;
+				left:0px;
+				width:100%;
+				background-color: gray;
+				text-align: center;
+			}
+			.boolfield {
+				width: 135px;
+				margin-left: 131px;
+			}
+			#promptfieldname {
+				font-family: Calibri;
+				vertical-align: top;
+				font-size: 72px;
+				position: relative;
+				top: 40%;
+			}
+			#promptfieldname2 {
+				font-family: Calibri;
+				vertical-align: top;
+				font-size: 72px;
+				position: relative;
+				top: 40%;
+			}
+			#promptfieldfield {
+				font-family: Calibri;
+				font-size: 72px;
+				width: 152px;
+				height: 76px;
+				vertical-align: top;
+				position: relative;
+				top: 40%;
+				margin-top: 4px;
+				border: 0;
+			}
+			#prompt {
+				text-align: center;
+				display: none;
+				position: fixed;
+				top: 360px;
+				left: 0px;
+				width: 100%;
+				height: calc(100% - 360px);
+				background-color: rgba(255, 255, 255, 0.7);
+				backdrop-filter: blur(10px);
+			}
+			form {
+				display: inline;
+			}
+		</style>
+	</head>
+	<body>{% load static %}
+		<div id="header"><a style="color: white; font-family: Calibri; font-size: 36pt;">{% if nottoday %}Editing{% else %}Today{% endif %}</a></div>
+		
+		<div id="details">
+			<a class="datetitle">{{now}}</a><br />
+			<a class="datenotes">{{note}}</a><br /><br />
+		</div>
+		<div id="fields">
+			{% for option in options %}
+			{% if option.type1 %}
+			<div id="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><img src='{% static "m.png" %}' class="minusbutton" onclick="sendChangeRequest({{option.order}},{{option.valminus}});" /><span class="fieldspan"><center style="margin-top: 30px;"><a class="intvalue">{{option.val}}</a></center></span><img src='{% static "p.png" %}' class="plusbutton" onclick="sendChangeRequest({{option.order}},{{option.valplus}});" /></div>
+			{% elif option.type2 %}
+			<div id="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><img src='{% static "m.png" %}' class="minusbutton" onclick="changeValue('{{option.name}}','{{option.val}}','-','{{option.order}}');" /><span class="fieldspan"><center style="margin-top: 30px;"><a class="intvalue">{{option.val}}</a></center></span><img src='{% static "p.png" %}' class="plusbutton" onclick="changeValue('{{option.name}}','{{option.val}}','+','{{option.order}}');" /></div>
+			{% elif option.type3 %}
+			<div id="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><span class="field2span"><center style="margin-top: 30px;"><input type="number" class="intform" value="{{option.val}}" onfocus="changeValue('{{option.name}}','','e','{{option.order}}');" /></center></span></div>
+			{% elif option.type4 %}
+			<div id="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><img src='{% static "u" %}{{option.val}}.png' class="boolfield" onclick="sendChangeRequest({{option.order}},{{option.valinverted}});" /></div>
+			{% endif %}
+			{% endfor %}
+
+			<div id="fieldobj"></div>
+			<div id="fieldobj"></div>
+			<div id="fieldobj"></div>
+			<div id="fieldobj"></div>
+			<div id="fieldobj"></div>
+			<div id="fieldobj"></div>
+			<div id="fieldobj"></div>
+			<div id="fieldobj"></div>
+			<div id="fieldobj"></div>
+		</div>
+		<a href="/calendar{% if nottoday %}/?calday={{descr}}{% endif %}"><img src='{% static "c.png" %}' style="position: absolute; left: 0px; top: 90px; width: 180px;" /></a>
+		<img src='{% static "e.png" %}' style="position: absolute; right: 0px; top: 90px; width: 180px;" onclick="changeValue('Notes','{{noteact}}','n','notez');" />
+		<div id="prompt">
+		<a id="promptfieldname">error</a><br />
+		<a id="promptfieldname2">error</a>
+		<input type="number" onkeypress='checkPress(event.charCode.toString());' id="promptfieldfield" value="" onfocusout="resetChangeValue()" />
+		</div>
+		<script type="text/javascript">
+		
+		var globalvarname="error"
+		var globalactionn="error"
+		var globalprev="error"
+		function changeValue(name,prev,actionn,varname) {
+			document.getElementById('prompt').style.display = 'block';
+			document.getElementById("promptfieldname").innerHTML=name;
+			globalvarname = varname
+			globalactionn = actionn
+			globalprev = prev
+			if (actionn=="e") {
+				document.getElementById("promptfieldfield").type="number";
+				document.getElementById("promptfieldfield").style.width="152px";
+				document.getElementById("promptfieldfield").value="";
+				document.getElementById("promptfieldname2").innerHTML="= ";
+			} else if (actionn=="n") {
+				document.getElementById("promptfieldfield").type="text";
+				document.getElementById("promptfieldfield").style.width="800px";
+				document.getElementById("promptfieldfield").value=prev;
+				document.getElementById("promptfieldname2").innerHTML="";
+			} else {
+				document.getElementById("promptfieldfield").type="number";
+				document.getElementById("promptfieldfield").style.width="152px";
+				document.getElementById("promptfieldfield").value="";
+				document.getElementById("promptfieldname2").innerHTML="= "+prev+" "+actionn+" ";
+			}
+			document.getElementById("promptfieldfield").focus();
+		}
+		function checkPress(keyy) {
+			if(keyy=="13") {
+				formSubmit();
+			}
+		}
+		function formSubmit() {
+			var finalval = "error";
+			if (globalactionn=="+") {
+				finalvar = (parseInt(globalprev) + parseInt(document.getElementById("promptfieldfield").value)).toString();
+			} else if (globalactionn=="-") {
+				finalvar = (parseInt(globalprev) - parseInt(document.getElementById("promptfieldfield").value)).toString();
+			} else {
+				finalvar = document.getElementById("promptfieldfield").value.toString();
+			}
+			sendChangeRequest(globalvarname,finalvar)
+		}
+		function resetChangeValue() {
+			document.getElementById('prompt').style.display = 'none';
+			document.getElementById("promptfieldname").innerHTML="error";
+			document.getElementById("promptfieldname2").innerHTML="error";
+			document.getElementById("promptfieldfield").value="";
+		}
+		function sendChangeRequest(y,z) {
+			window.location.href = "/change/?day={{descr}}&var="+y.toString()+"&val="+z.toString()
+		}
+		</script>
+	</body>
+</html>
+
+<!--
+display: none; 
+-->
