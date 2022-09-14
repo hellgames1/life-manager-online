@@ -238,7 +238,7 @@
 			document.getElementById("promptfieldfield").value="";
 		}
 		function sendChangeRequest(y,z) {
-			window.location.href = "/change/?day={{descr}}&var="+y.toString()+"&val="+z.toString()+"&y="+scroll_to_bottom.scrollTop.toString()
+			window.location.href = "/change/?day={{descr}}&var="+y.toString()+"&val="+z.toString()+"&y="+scroll_to_bottom.scrollTop.toString();
 		}
 		var intervalId = window.setInterval(function(){
 			let xmlHttp = new XMLHttpRequest();
@@ -247,7 +247,7 @@
 			let resp = xmlHttp.responseText.split("@");
 			document.getElementById("actualclock").innerHTML=resp[0];
 			if (resp[1] != "{{jscheck}}") {
-				location.reload();
+				{% if nottoday %}window.location.href = "/?v={{descr}}&y="+scroll_to_bottom.scrollTop.toString();{% else %}window.location.href = "/?y="+scroll_to_bottom.scrollTop.toString();{% endif %}
 			}
 		}, 1000);
 		</script>
