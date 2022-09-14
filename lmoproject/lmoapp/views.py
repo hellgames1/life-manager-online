@@ -5,10 +5,11 @@ from django.http import HttpResponse
 from lmoapp.credentials import default_username, default_password
 
 # Create your views here.
-
+def login_check(request):
+    return "username" in request.session and "password" in request.session and request.session["username"] == default_username and request.session["password"]==default_password
 
 def check(request):
-    if "username" in request.session and "password" in request.session and request.session["username"] == default_username and request.session["password"]==default_password:
+    if login_check(request):
         if request.method == 'GET' and 'd' in request.GET:
             d = request.GET['d']
             response = datetime.now().strftime("%H:%M:%S")
@@ -29,7 +30,7 @@ def check(request):
         return redirect("/login")
 
 def change(request):
-    if "username" in request.session and "password" in request.session and request.session["username"] == default_username and request.session["password"]==default_password:
+    if login_check(request):
         if request.method == 'GET' and 'day' in request.GET and 'var' in request.GET and 'val' in request.GET and 'y' in request.GET:
             day = request.GET['day']
             var = request.GET['var']
@@ -37,11 +38,17 @@ def change(request):
             y = request.GET['y']
             now = datetime.now()
             currentday = now.strftime("%d%m%Y")
+            keep = UserSettings.objects.all()[0].__dict__["val"+var+"keep"]
+            daypointer = Day.objects.filter(descr=day)
             if var == "notez":
-                exec(f"Day.objects.filter(descr=day).update(notes='{val}')")
+                exec(f"daypointer.update(notes='{val}')")
             else:
-                exec(f"Day.objects.filter(descr=day).update(int{var}={val})")
+                exec(f"daypointer.update(int{var}={val})")
+            #print(Day.objects.filter(id__gt=2))
             print(f"Changed value of variable #{var} to \"{val}\" for day {day}")
+            if keep == 1:
+                exec(f"Day.objects.filter(id__gt=daypointer[0].id).update(int{var}={val})")
+                print("Also updated all days after that!")
             if day != currentday:
                 return redirect("/?v="+day+"&y="+y)
             else:
@@ -52,7 +59,7 @@ def change(request):
         return redirect("/login")
 
 def mainview(request):
-    if "username" in request.session and "password" in request.session and request.session["username"] == default_username and request.session["password"]==default_password:
+    if login_check(request):
         context = {}
         if request.method == 'GET' and 'v' in request.GET:
             currentday = request.GET['v']
@@ -91,7 +98,7 @@ def mainview(request):
         return redirect("/login")
 
 def calendar(request):
-    if "username" in request.session and "password" in request.session and request.session["username"] == default_username and request.session["password"]==default_password:
+    if login_check(request):
         now = datetime.now()
         nowstr = now.strftime("%d%m%Y")
         context = {}
