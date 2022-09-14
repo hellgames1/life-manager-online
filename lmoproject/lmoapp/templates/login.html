@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+	<head>
+		<style type="text/css">
+			body {
+				font-family: Calibri;
+				font-size: 48pt;
+			}
+			input {
+				width: 400px;
+				height: 80px;
+				font-family: Calibri;
+				font-size: 48pt;
+			}
+		</style>
+	</head>
+	<body><center><br /><br /><br />
+		<form action="/login/" method="post">{% csrf_token %}
+		Username: <input type="text" name="username" /><br /><br />
+		Password: <input type="password" name="password" /><br /><br />
+		<input type="submit" />
+		</form>
+	</center></body>
+</html>
+
+<!--
+display: none; 
+-->

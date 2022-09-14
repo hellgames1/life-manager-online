@@ -123,7 +123,7 @@
 		<div id="calendar">
 			{% for day in days %}
 			{% if day.selected %}
-			<div class="daysel" onclick="gotoday('{{day.descr}}', true);"><a class="daytext" style="color:white;">{{day.date}}</a><br /><a class="daymonthtext" style="color:white;">{{day.month_verbose}}</a>
+			<div class="daysel"><a class="daytext" style="color:white;">{{day.date}}</a><br /><a class="daymonthtext" style="color:white;">{{day.month_verbose}}</a>
 			{% else %}
 			{% if day.today %}
 			<div class="daytoday" onclick="gotoday('{{day.descr}}', false);"><a class="daytext">{{day.date}}</a><br /><a class="daymonthtext">{{day.month_verbose}}</a>
