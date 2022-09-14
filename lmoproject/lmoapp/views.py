@@ -12,7 +12,7 @@ def check(request):
             response += "@"
             daypointer = Day.objects.filter(descr=d)[0].__dict__
             settingspointer = UserSettings.objects.all()[0].__dict__
-            for i in range(1, 10):
+            for i in range(1, 21):
                 if settingspointer["val" + str(i) + "name"] != "":
                     response += str(daypointer["int"+str(i)])+"."
                 else:
@@ -58,7 +58,7 @@ def mainview(request):
     settingspointer = UserSettings.objects.all()[0].__dict__
     options=[]
     response = ""
-    for i in range(1,10):
+    for i in range(1,21):
         if settingspointer["val"+str(i)+"name"] != "":
             options.append({"order": str(i), "name": settingspointer["val"+str(i)+"name"], "type"+str(settingspointer["val"+str(i)+"type"]): "yes", "val": daypointer["int"+str(i)], "valminus": daypointer["int"+str(i)]-1, "valplus": daypointer["int"+str(i)]+1, "valinverted": 1-daypointer["int"+str(i)]})
             response += str(daypointer["int" + str(i)]) + "."
@@ -107,7 +107,7 @@ def calendar(request):
             else:
                 context["notes"]=notes
             listvars=""
-            for i in range(1, 10):
+            for i in range(1, 21):
                 if settingspointer["val" + str(i) + "name"] != "":
                     name = settingspointer["val" + str(i) + "name"]
                     typpe = settingspointer["val" + str(i) + "type"]
