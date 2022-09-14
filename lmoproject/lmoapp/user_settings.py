@@ -136,3 +136,59 @@ def do_user_settings(request):
         year = progress[2]
         print(f"{date:02d}.{month:02d}.{year}")
         return HttpResponse("Done!")
+
+
+"""
+woke up at
+3
+no
+13
+no
+brushed my teeth
+1
+no
+0
+no
+kilometers run
+2
+no
+0
+no
+worked out
+4
+no
+0
+no
+minutes meditation
+2
+no
+0
+no
+money spent
+2
+no
+0
+no
+took a shower
+4
+no
+0
+no
+NNN
+4
+no
+0
+no
+kilograms
+3
+yes
+80
+yes
+14
+9
+2022
+500
+
+
+
+"""

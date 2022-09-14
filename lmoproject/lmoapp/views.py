@@ -5,20 +5,22 @@ from django.http import HttpResponse
 
 # Create your views here.
 def change(request):
-    if request.method == 'GET' and 'day' in request.GET and 'var' in request.GET and 'val' in request.GET:
+    if request.method == 'GET' and 'day' in request.GET and 'var' in request.GET and 'val' in request.GET and 'y' in request.GET:
         day = request.GET['day']
         var = request.GET['var']
         val = request.GET['val']
+        y = request.GET['y']
         now = datetime.now()
         currentday = now.strftime("%d%m%Y")
         if var == "notez":
             exec(f"Day.objects.filter(descr=day).update(notes='{val}')")
         else:
             exec(f"Day.objects.filter(descr=day).update(int{var}={val})")
+        print(f"Changed value of variable #{var} to \"{val}\" for day {day}")
         if day != currentday:
-            return redirect("/?v="+day)
+            return redirect("/?v="+day+"&y="+y)
         else:
-            return redirect("main-page")
+            return redirect("/?y="+y)
     else:
         return HttpResponse("Invalid request!")
 
@@ -36,15 +38,12 @@ def mainview(request):
     month_verbose = months_verbose[month]
     daypointer = Day.objects.filter(descr=currentday)[0].__dict__
     settingspointer = UserSettings.objects.all()[0].__dict__
-    print(daypointer)
     options=[]
-    print()
     for i in range(1,10):
         if settingspointer["val"+str(i)+"name"] != "":
             options.append({"order": str(i), "name": settingspointer["val"+str(i)+"name"], "type"+str(settingspointer["val"+str(i)+"type"]): "yes", "val": daypointer["int"+str(i)], "valminus": daypointer["int"+str(i)]-1, "valplus": daypointer["int"+str(i)]+1, "valinverted": 1-daypointer["int"+str(i)]})
         else:
             break
-    print(options)
     if daypointer["notes"]=="":
         context["note"]="<no notes>"
     else:
@@ -53,6 +52,8 @@ def mainview(request):
     context["now"] = str(date) + " " + month_verbose
     context["descr"] = currentday
     context["options"] = options
+    if 'y' in request.GET:
+        context["scrollto"]=request.GET['y']
     return render(request, 'view.html', context)
 
 def calendar(request):
@@ -64,7 +65,6 @@ def calendar(request):
         context["nottoday"] = "yes"
     else:
         selected=nowstr
-    print(selected)
     months_verbose = ["error","January","February","March","April","May","June","July","August","September","October","November","December"]
     days=[]
     for day in list(Day.objects.all()):

@@ -187,7 +187,10 @@
 		<input type="number" onkeypress='checkPress(event.charCode.toString());' id="promptfieldfield" value="" onfocusout="resetChangeValue()" />
 		</div>
 		<script type="text/javascript">
-		
+		let scroll_to_bottom = document.getElementById('fields');
+		{% if scrollto %}
+		scroll_to_bottom.scrollTop = {{scrollto}};
+		{% endif %}
 		var globalvarname="error"
 		var globalactionn="error"
 		var globalprev="error"
@@ -238,7 +241,7 @@
 			document.getElementById("promptfieldfield").value="";
 		}
 		function sendChangeRequest(y,z) {
-			window.location.href = "/change/?day={{descr}}&var="+y.toString()+"&val="+z.toString()
+			window.location.href = "/change/?day={{descr}}&var="+y.toString()+"&val="+z.toString()+"&y="+scroll_to_bottom.scrollTop.toString()
 		}
 		</script>
 	</body>
