@@ -67,6 +67,7 @@ def calendar(request):
         selected=nowstr
     months_verbose = ["error","January","February","March","April","May","June","July","August","September","October","November","December"]
     days=[]
+    settingspointer = UserSettings.objects.all()[0].__dict__
     for day in list(Day.objects.all()):
         date = int(day.descr[:2])
         month = int(day.descr[2:4])
@@ -83,6 +84,26 @@ def calendar(request):
                 context["notes"]="<no notes>"
             else:
                 context["notes"]=notes
+            listvars=""
+            for i in range(1, 10):
+                if settingspointer["val" + str(i) + "name"] != "":
+                    name = settingspointer["val" + str(i) + "name"]
+                    typpe = settingspointer["val" + str(i) + "type"]
+                    value = day.__dict__["int" + str(i)]
+                    if typpe == 4 and value == 0:
+                        value = "no"
+                    elif typpe == 4 and value == 1:
+                        value = "yes"
+                    if i % 2 != 0:
+                        listvars += f"<tr><td>{name}: {value}</td>"
+                    else:
+                        listvars += f"<td>{name}: {value}</td></tr>"
+
+                else:
+                    break
+            if listvars[-5:] == "</td>":
+                listvars += "</tr>"
+            context["listvars"] = listvars
         if notes != "":
             days[len(days)-1]["note"]="yes"
     if request.method == 'GET' and 'y' in request.GET:
