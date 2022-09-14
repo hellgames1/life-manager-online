@@ -17,6 +17,7 @@ def check(request):
                     response += str(daypointer["int"+str(i)])+"."
                 else:
                     break
+            response += daypointer["notes"]
         return HttpResponse(response)
     else:
         return HttpResponse("wtf")
@@ -63,6 +64,7 @@ def mainview(request):
             response += str(daypointer["int" + str(i)]) + "."
         else:
             break
+    response += daypointer["notes"]
     if daypointer["notes"]=="":
         context["note"]="<no notes>"
     else:
