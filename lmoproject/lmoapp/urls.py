@@ -21,6 +21,7 @@ urlpatterns = [
     path('calendar/', views.calendar, name='calendar-page'),
     path('', views.mainview, name='main-page'),
     path('change/', views.change, name='change-page'),
-    path('setup/',user_settings.do_user_settings)
+    path('setup/',user_settings.do_user_settings),
+    path('chk/',views.check)
 ]
 urlpatterns += staticfiles_urlpatterns()

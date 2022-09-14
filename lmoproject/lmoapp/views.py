@@ -4,6 +4,23 @@ from datetime import datetime
 from django.http import HttpResponse
 
 # Create your views here.
+def check(request):
+    if request.method == 'GET' and 'd' in request.GET:
+        d = request.GET['d']
+        response = datetime.now().strftime("%H:%M:%S")
+        if d!="c":
+            response += "@"
+            daypointer = Day.objects.filter(descr=d)[0].__dict__
+            settingspointer = UserSettings.objects.all()[0].__dict__
+            for i in range(1, 10):
+                if settingspointer["val" + str(i) + "name"] != "":
+                    response += str(daypointer["int"+str(i)])+"."
+                else:
+                    break
+        return HttpResponse(response)
+    else:
+        return HttpResponse("wtf")
+
 def change(request):
     if request.method == 'GET' and 'day' in request.GET and 'var' in request.GET and 'val' in request.GET and 'y' in request.GET:
         day = request.GET['day']
@@ -39,9 +56,11 @@ def mainview(request):
     daypointer = Day.objects.filter(descr=currentday)[0].__dict__
     settingspointer = UserSettings.objects.all()[0].__dict__
     options=[]
+    response = ""
     for i in range(1,10):
         if settingspointer["val"+str(i)+"name"] != "":
             options.append({"order": str(i), "name": settingspointer["val"+str(i)+"name"], "type"+str(settingspointer["val"+str(i)+"type"]): "yes", "val": daypointer["int"+str(i)], "valminus": daypointer["int"+str(i)]-1, "valplus": daypointer["int"+str(i)]+1, "valinverted": 1-daypointer["int"+str(i)]})
+            response += str(daypointer["int" + str(i)]) + "."
         else:
             break
     if daypointer["notes"]=="":
@@ -52,6 +71,7 @@ def mainview(request):
     context["now"] = str(date) + " " + month_verbose
     context["descr"] = currentday
     context["options"] = options
+    context["jscheck"] = response
     if 'y' in request.GET:
         context["scrollto"]=request.GET['y']
     return render(request, 'view.html', context)

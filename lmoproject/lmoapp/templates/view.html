@@ -147,10 +147,13 @@
 			form {
 				display: inline;
 			}
+			fullscreen, ::backdrop {
+				background-color: white;
+			}
 		</style>
 	</head>
-	<body>{% load static %}
-		<div id="header"><a style="color: white; font-family: Calibri; font-size: 36pt;">{% if nottoday %}Editing{% else %}Today{% endif %}</a></div>
+	<body id="isbody">{% load static %}
+		<div id="header"><a style="color: white; font-family: Calibri; font-size: 36pt;">{% if nottoday %}Editing{% else %}Today{% endif %}</a><a style="color: white; font-family: Calibri; font-size: 36pt; position: absolute; right:0px;" id="actualclock">16:36:07</a></div>
 		
 		<div id="details">
 			<a class="datetitle">{{now}}</a><br />
@@ -168,16 +171,6 @@
 			<div id="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><img src='{% static "u" %}{{option.val}}.png' class="boolfield" onclick="sendChangeRequest({{option.order}},{{option.valinverted}});" /></div>
 			{% endif %}
 			{% endfor %}
-
-			<div id="fieldobj"></div>
-			<div id="fieldobj"></div>
-			<div id="fieldobj"></div>
-			<div id="fieldobj"></div>
-			<div id="fieldobj"></div>
-			<div id="fieldobj"></div>
-			<div id="fieldobj"></div>
-			<div id="fieldobj"></div>
-			<div id="fieldobj"></div>
 		</div>
 		<a href="/calendar{% if nottoday %}/?calday={{descr}}{% endif %}"><img src='{% static "c.png" %}' style="position: absolute; left: 0px; top: 90px; width: 180px;" /></a>
 		<img src='{% static "e.png" %}' style="position: absolute; right: 0px; top: 90px; width: 180px;" onclick="changeValue('Notes','{{noteact}}','n','notez');" />
@@ -191,6 +184,10 @@
 		{% if scrollto %}
 		scroll_to_bottom.scrollTop = {{scrollto}};
 		{% endif %}
+		let xmlHttp = new XMLHttpRequest();
+		xmlHttp.open( "GET","/chk/?d=c", false ); // false for synchronous request
+		xmlHttp.send( null );
+		document.getElementById("actualclock").innerHTML=xmlHttp.responseText;
 		var globalvarname="error"
 		var globalactionn="error"
 		var globalprev="error"
@@ -243,6 +240,16 @@
 		function sendChangeRequest(y,z) {
 			window.location.href = "/change/?day={{descr}}&var="+y.toString()+"&val="+z.toString()+"&y="+scroll_to_bottom.scrollTop.toString()
 		}
+		var intervalId = window.setInterval(function(){
+			let xmlHttp = new XMLHttpRequest();
+			xmlHttp.open( "GET","/chk/?d={{descr}}", false ); // false for synchronous request
+			xmlHttp.send( null );
+			let resp = xmlHttp.responseText.split("@");
+			document.getElementById("actualclock").innerHTML=resp[0];
+			if (resp[1] != "{{jscheck}}") {
+				location.reload();
+			}
+		}, 5000);
 		</script>
 	</body>
 </html>
