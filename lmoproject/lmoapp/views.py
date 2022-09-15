@@ -77,7 +77,22 @@ def mainview(request):
         response = ""
         for i in range(1,21):
             if settingspointer["val"+str(i)+"name"] != "":
-                options.append({"order": str(i), "name": settingspointer["val"+str(i)+"name"], "type"+str(settingspointer["val"+str(i)+"type"]): "yes", "val": daypointer["int"+str(i)], "valminus": daypointer["int"+str(i)]-1, "valplus": daypointer["int"+str(i)]+1, "valinverted": 1-daypointer["int"+str(i)]})
+                value = daypointer["int"+str(i)]
+                typpe = settingspointer["val"+str(i)+"type"]
+                if typpe == 1 or typpe == 2 or typpe == 5 or typpe == 8:
+                    value = f"{value:.0f}"
+                elif typpe == 3 or typpe == 6:
+                    value = f"{value:.1f}"
+                elif typpe == 4 or typpe == 7:
+                    value = f"{value:.2f}"
+                if typpe == 3 or typpe == 4:
+                    typpe = 2
+                elif typpe == 6 or typpe == 7:
+                    typpe = 3
+                elif typpe == 8:
+                    typpe = 4
+                ivalue = int(float(value))
+                options.append({"order": str(i), "name": settingspointer["val"+str(i)+"name"], "type"+str(typpe): "yes", "val": value, "valminus": ivalue-1, "valplus": ivalue+1, "valinverted": 1-ivalue})
                 response += str(daypointer["int" + str(i)]) + "."
             else:
                 break
@@ -132,9 +147,15 @@ def calendar(request):
                         name = settingspointer["val" + str(i) + "name"]
                         typpe = settingspointer["val" + str(i) + "type"]
                         value = day.__dict__["int" + str(i)]
-                        if typpe == 4 and value == 0:
+                        if typpe == 1 or typpe == 2 or typpe == 5 or typpe == 8:
+                            value = f"{value:.0f}"
+                        elif typpe == 3 or typpe == 6:
+                            value = f"{value:.1f}"
+                        elif typpe == 4 or typpe == 7:
+                            value = f"{value:.2f}"
+                        if typpe == 8 and value == "0":
                             value = "no"
-                        elif typpe == 4 and value == 1:
+                        elif typpe == 8 and value == "1":
                             value = "yes"
                         if i % 2 != 0:
                             listvars += f"<tr><td>{name}: {value}</td>"

@@ -24,7 +24,7 @@ def do_user_settings(request):
             print(f"Value #{count+1}:")
             value_name=input("Choose name for this value: ")
             br()
-            print("Value types can be\n1) Number (+ and - button change value by 1)\n2) Number (+ and - button change value by entered amount)\n3) Number (absolute value is editable)\n4) Box (checked/unchecked)")
+            print("Value types can be\n\n1) Number (+ and - button change value by 1)\n\n2) Number (+ and - button change value by entered amount)\n3) Same as 2 but with 1 decimal place\n4) Same as 2 but with 2 decimal places\n\n5) Number (absolute value is editable)\n6) Same as 5 but with 1 decimal place\n7) Same as 5 but with 2 decimal places\n\n8) Box (checked/unchecked)")
             value_type=int(input(f"Choose type for \"{value_name}\": "))
             br()
             print("Do you want floating value?\nno) the value is reset to default for each day\nyes) the value from the end of the day is carried over to the next day")
@@ -34,8 +34,8 @@ def do_user_settings(request):
             else:
                 value_keep=0
             br()
-            print(f"What should be the default value for \"{value_name}\"?")
-            if value_type == 4:
+            print(f"What should be the default value for \"{value_name}\"? (can't be decimal)")
+            if value_type == 8:
                 print("1 is checked and 0 is unchecked")
             value_default=int(input())
             count += 1
@@ -139,55 +139,7 @@ def do_user_settings(request):
 
 
 """
-woke up at
-3
-no
-13
-no
-brushed my teeth
-1
-no
-0
-no
-kilometers run
-2
-no
-0
-no
-worked out
-4
-no
-0
-no
-minutes meditation
-2
-no
-0
-no
-money spent
-2
-no
-0
-no
-took a shower
-4
-no
-0
-no
-NNN
-4
-no
-0
-no
-kilograms
-3
-yes
-80
-yes
-14
-9
-2022
-500
+
 
 
 

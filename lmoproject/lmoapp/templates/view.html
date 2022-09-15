@@ -28,7 +28,7 @@
 				height: calc(100% - 360px);
 				overflow-y: scroll;
 			}
-			#fieldobj {
+			.fieldobj {
 				top: 0px;
 				left: 0px;
 				width: 100%;
@@ -162,13 +162,13 @@
 		<div id="fields">
 			{% for option in options %}
 			{% if option.type1 %}
-			<div id="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><img src='{% static "m.png" %}' class="minusbutton" onclick="sendChangeRequest({{option.order}},{{option.valminus}});" /><span class="fieldspan"><center style="margin-top: 30px;"><a class="intvalue">{{option.val}}</a></center></span><img src='{% static "p.png" %}' class="plusbutton" onclick="sendChangeRequest({{option.order}},{{option.valplus}});" /></div>
+			<div class="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><img src='{% static "m.png" %}' class="minusbutton" onclick="sendChangeRequest({{option.order}},{{option.valminus}});" /><span class="fieldspan"><center style="margin-top: 30px;"><a class="intvalue">{{option.val}}</a></center></span><img src='{% static "p.png" %}' class="plusbutton" onclick="sendChangeRequest({{option.order}},{{option.valplus}});" /></div>
 			{% elif option.type2 %}
-			<div id="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><img src='{% static "m.png" %}' class="minusbutton" onclick="changeValue('{{option.name}}','{{option.val}}','-','{{option.order}}');" /><span class="fieldspan"><center style="margin-top: 30px;"><a class="intvalue">{{option.val}}</a></center></span><img src='{% static "p.png" %}' class="plusbutton" onclick="changeValue('{{option.name}}','{{option.val}}','+','{{option.order}}');" /></div>
+			<div class="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><img src='{% static "m.png" %}' class="minusbutton" onclick="changeValue('{{option.name}}','{{option.val}}','-','{{option.order}}');" /><span class="fieldspan"><center style="margin-top: 30px;"><a class="intvalue">{{option.val}}</a></center></span><img src='{% static "p.png" %}' class="plusbutton" onclick="changeValue('{{option.name}}','{{option.val}}','+','{{option.order}}');" /></div>
 			{% elif option.type3 %}
-			<div id="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><span class="field2span"><center style="margin-top: 30px;"><input type="number" class="intform" value="{{option.val}}" onfocus="changeValue('{{option.name}}','','e','{{option.order}}');" /></center></span></div>
+			<div class="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><span class="field2span"><center style="margin-top: 30px;"><input type="number" class="intform" value="{{option.val}}" onfocus="changeValue('{{option.name}}','','e','{{option.order}}');" /></center></span></div>
 			{% elif option.type4 %}
-			<div id="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><img src='{% static "u" %}{{option.val}}.png' class="boolfield" onclick="sendChangeRequest({{option.order}},{{option.valinverted}});" /></div>
+			<div class="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><img src='{% static "u" %}{{option.val}}.png' class="boolfield" onclick="sendChangeRequest({{option.order}},{{option.valinverted}});" /></div>
 			{% endif %}
 			{% endfor %}
 		</div>
@@ -223,9 +223,9 @@
 		function formSubmit() {
 			var finalval = "error";
 			if (globalactionn=="+") {
-				finalvar = (parseInt(globalprev) + parseInt(document.getElementById("promptfieldfield").value)).toString();
+				finalvar = (parseFloat(globalprev) + parseFloat(document.getElementById("promptfieldfield").value)).toString();
 			} else if (globalactionn=="-") {
-				finalvar = (parseInt(globalprev) - parseInt(document.getElementById("promptfieldfield").value)).toString();
+				finalvar = (parseFloat(globalprev) - parseFloat(document.getElementById("promptfieldfield").value)).toString();
 			} else {
 				finalvar = document.getElementById("promptfieldfield").value.toString();
 			}
