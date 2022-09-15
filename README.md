@@ -15,9 +15,13 @@ How to setup:
 7. Run python manage.py migrate --run-syncdb
 8. Run python manage.py runserver 192.168.0.104:8000 where you replace the IP with your local one
 9. Go to http://192.168.0.104:8000/setup (again replacing it with your IP)
-10. The setup procedure will begin on the terminal where you've run the server, follow the prompts
+10. The setup procedure will begin on the terminal where you've run the server, follow the prompts*
 11. Set your username and password in /lmoproject/lmoapp/credentials.py
 12. Done!
+
+*You can run dbgen_wizard for a more pleasant GUI interface to define the things you want to track.
+When you press Finish it will open a TXT file with generated input, which you can just copy and paste in
+the terminal on step 10. You will still have to enter the beginning date and database length.
 
 I can't be bothered to make responsive design, so currently this application
 does not display properly on a horizontal widescreen display. Also it's only tested on Chrome.
