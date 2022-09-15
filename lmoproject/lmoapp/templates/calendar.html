@@ -116,9 +116,9 @@
 				{{listvars | safe}}
 			</table>
 		</div>
-		<a href="/"><img src='{% static "x.png" %}' style="position: absolute; left: 0px; top: 90px; width: 180px;" /></a>
+		<a href="/" onclick="document.getElementById('xbutload').style.display='block';"><img src='{% static "x.png" %}' style="position: absolute; left: 0px; top: 90px; width: 180px;" /></a><img src='{% static "load.gif" %}' id="xbutload" style="display: none; position: absolute; left: 0px; top: 90px; width: 180px;" />
 		{% if nottoday %}
-		<a href="/?v={{descr}}"><img src='{% static "n.png" %}' style="position: absolute; right: 0px; top: 90px; width: 180px;" /></a>
+		<a href="/?v={{descr}}" onclick="document.getElementById('ebutload').style.display='block';"><img src='{% static "n.png" %}' style="position: absolute; right: 0px; top: 90px; width: 180px;" /></a><img src='{% static "load.gif" %}' id="ebutload" style="display: none; position: absolute; right: 0px; top: 90px; width: 180px;" />
 		{% endif %}
 		<div id="calendar">
 			{% for day in days %}
@@ -137,6 +137,7 @@
 			</div>
 			{% endfor %}
 		</div>
+	<img src='{% static "load.gif" %}' id="calload" style="display: none; position: absolute; left: 0px; top: 0px;" />
 	<script type="text/javascript">
 		let scroll_to_bottom = document.getElementById('calendar');
 		{% if scrollto %}
@@ -144,7 +145,17 @@
 		{% endif %}
 		function gotoday(x,addday,th=0){
 			if (th!=0) {
-				th.style.backgroundColor = "rgb(255,127,127)";
+				let gbcr = th.getBoundingClientRect()
+				let l = Math.round(gbcr.left)
+				let t = Math.round(gbcr.top)
+				let h = Math.round(gbcr.bottom - t)
+				let w = Math.round(gbcr.right - l)
+				let loadgif = document.getElementById('calload');
+				loadgif.style.top = t.toString()+"px"
+				loadgif.style.left = l.toString()+"px"
+				loadgif.style.width = w.toString()+"px"
+				loadgif.style.height = h.toString()+"px"
+				loadgif.style.display = "block"
 			}
 			if (addday) {
 				window.location.href = "/calendar/?calday="+x+"&y="+scroll_to_bottom.scrollTop.toString()

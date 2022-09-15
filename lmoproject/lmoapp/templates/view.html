@@ -168,17 +168,18 @@
 			{% elif option.type3 %}
 			<div class="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><span class="field2span"><center style="margin-top: 30px;"><input type="number" class="intform" value="{{option.val}}" onfocus="changeValue('{{option.name}}','','e','{{option.order}}');" /></center></span></div>
 			{% elif option.type4 %}
-			<div class="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><img src='{% static "u" %}{{option.val}}.png' class="boolfield" onclick="sendChangeRequest({{option.order}},{{option.valinverted}});" /></div>
+			<div class="fieldobj"><span class="fieldnamespan"><a class="fieldname">{{option.name}}</a></span><img src='{% static "u" %}{{option.val}}.png' class="boolfield" onclick="sendChangeRequest({{option.order}},{{option.valinverted}},this);" /></div>
 			{% endif %}
 			{% endfor %}
 		</div>
-		<a href="/calendar{% if nottoday %}/?calday={{descr}}{% endif %}"><img src='{% static "c.png" %}' style="position: absolute; left: 0px; top: 90px; width: 180px;" /></a>
+		<a href="/calendar{% if nottoday %}/?calday={{descr}}{% endif %}" onclick="document.getElementById('calbutload').style.display='block';"><img src='{% static "c.png" %}' style="position: absolute; left: 0px; top: 90px; width: 180px;" /></a><img src='{% static "load.gif" %}' id="calbutload" style="display: none; position: absolute; left: 0px; top: 90px; width: 180px;" />
 		<img src='{% static "e.png" %}' style="position: absolute; right: 0px; top: 90px; width: 180px;" onclick="changeValue('Notes','{{noteact}}','n','notez');" />
 		<div id="prompt">
 		<a id="promptfieldname">error</a><br />
 		<a id="promptfieldname2">error</a>
 		<input type="number" onkeypress='checkPress(event.charCode.toString());' id="promptfieldfield" value="" onfocusout="resetChangeValue()" />
 		</div>
+		<img src='{% static "load.gif" %}' id="calload" style="display: none; position: absolute; left: 0px; top: 0px;" />
 		<script type="text/javascript">
 		let scroll_to_bottom = document.getElementById('fields');
 		{% if scrollto %}
@@ -239,7 +240,17 @@
 		}
 		function sendChangeRequest(y,z,th=0) {
 			if (th!=0) {
-				th.style.opacity="1";
+				let gbcr = th.getBoundingClientRect()
+				let l = Math.round(gbcr.left)
+				let t = Math.round(gbcr.top)
+				let h = Math.round(gbcr.bottom - t)
+				let w = Math.round(gbcr.right - l)
+				let loadgif = document.getElementById('calload');
+				loadgif.style.top = t.toString()+"px"
+				loadgif.style.left = l.toString()+"px"
+				loadgif.style.width = w.toString()+"px"
+				loadgif.style.height = h.toString()+"px"
+				loadgif.style.display = "block"
 			}
 			window.location.href = "/change/?day={{descr}}&var="+y.toString()+"&val="+z.toString()+"&y="+scroll_to_bottom.scrollTop.toString();
 		}
