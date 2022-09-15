@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+	<head>
+		<style type="text/css">
+			#calendar {
+				user-select: none;
+				border: 1px solid black;
+				position: absolute;
+				top: 15%;
+				left: 0px;
+				width:100%;
+				height:85%;
+				overflow-y: scroll;
+			}
+			.day {
+				display: inline-block;
+				box-sizing: border-box;
+				vertical-align:middle;
+				border: 1px solid black;
+				width: 14%;
+				height: 0;
+				padding-bottom: 20%;
+				margin-right: -4px;
+				text-align: center;
+				position: relative;
+				
+			}
+			.daytext {
+				position: relative;
+				display: inline;
+				font-family: Calibri;
+				font-size: 80px;
+				color: black;
+				text-decoration: none;
+			}
+			.daymonthtext {
+				position: relative;
+				display: inline;
+				font-family: Calibri;
+				font-size: 20px;
+				text-align: center;
+				color: black;
+				text-decoration: none;
+			}
+			.daymonthval {
+				position: relative;
+				display: inline;
+				font-family: Calibri;
+				font-size: 42px;
+				font-weight: bold;
+				text-align: center;
+				color: black;
+				text-decoration: none;
+			}
+			#details {
+				position: absolute;
+				top: 90px;
+				left: 0px;
+				width: 100%;
+				text-align: center;
+				overflow-y: scroll;
+				height: calc(50% - 90px);
+			}
+			.datetitle {
+				font-family: Calibri;
+				font-size: 62px;
+			}
+			td {
+				width: 50%;
+			}
+			#header {
+				position: absolute;
+				top:0px;
+				left:0px;
+				width:100%;
+				background-color: gray;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>{% load static %}
+		<div id="header"><a style="color: white; font-family: Calibri; font-size: 36pt;">Stats</a></div>
+		<div id="details"><br /><br />
+			<a class="datetitle">{{tracking}}</a>
+		</div>
+		<a href="/calendar/" onclick="document.getElementById('xbutload').style.display='block';"><img src='{% static "x.png" %}' style="position: absolute; left: 0px; top: 90px; width: 180px;" /></a><img src='{% static "load.gif" %}' id="xbutload" style="display: none; position: absolute; left: 0px; top: 90px; width: 180px;" />
+		<!--a href="/?v=descr" onclick="document.getElementById('ebutload').style.display='block';"><img src='' style="position: absolute; right: 0px; top: 90px; width: 180px;" /></a><img src='' id="ebutload" style="display: none; position: absolute; right: 0px; top: 90px; width: 180px;" /-->
+		<div id="calendar">
+			{% if firstset %}
+			{% for day in days %}
+			{% if day.clickable %}
+			<div class="day" onclick="requestChart('{{firstset}}','{{day.id}}', this);" style="background-color: rgb(255,{{day.tval}},{{day.tval}});"><a class="daytext">{{day.date}}</a><br /><a class="daymonthtext">{{day.month_verbose}}</a><br /><br /><a class="daymonthval">{{day.show}}</a>
+
+			</div>
+			{% else %}
+			<div class="day" style="background-color: rgb(255,{{day.tval}},{{day.tval}});"><a class="daytext">{{day.prefix}}{{day.date}}</a><br /><a class="daymonthtext">{{day.month_verbose}}</a><br /><br /><a class="daymonthval">{{day.show}}</a>
+
+			</div>
+			{% endif %}
+			{% endfor %}
+			{% else %}
+			{% for day in days %}
+			<div class="day" onclick="setfirstday('{{day.descr}}', this);" style="background-color: rgb(255,{{day.tval}},{{day.tval}});"><a class="daytext">{{day.date}}</a><br /><a class="daymonthtext">{{day.month_verbose}}</a><br /><br /><a class="daymonthval">{{day.show}}</a>
+
+			</div>
+			{% endfor %}
+			{% endif %}
+		</div>
+	<img src='{% static "load.gif" %}' id="calload" style="display: none; position: absolute; left: 0px; top: 0px;" />
+	<script type="text/javascript">
+		let scroll_to_bottom = document.getElementById('calendar');
+		{% if scrollto %}
+		scroll_to_bottom.scrollTop = {{scrollto}};
+		{% endif %}
+		function setfirstday(x,th=0){
+			if (th!=0) {
+				let gbcr = th.getBoundingClientRect()
+				let l = Math.round(gbcr.left)
+				let t = Math.round(gbcr.top)
+				let h = Math.round(gbcr.bottom - t)
+				let w = Math.round(gbcr.right - l)
+				let loadgif = document.getElementById('calload');
+				loadgif.style.top = t.toString()+"px"
+				loadgif.style.left = l.toString()+"px"
+				loadgif.style.width = w.toString()+"px"
+				loadgif.style.height = h.toString()+"px"
+				loadgif.style.display = "block"
+			}
+			window.location.href = "/cstat/?trackval={{trackval}}&f="+x+"&y="+scroll_to_bottom.scrollTop.toString()
+		}
+		function requestChart(from,to,th=0){
+			if (th!=0) {
+				let gbcr = th.getBoundingClientRect()
+				let l = Math.round(gbcr.left)
+				let t = Math.round(gbcr.top)
+				let h = Math.round(gbcr.bottom - t)
+				let w = Math.round(gbcr.right - l)
+				let loadgif = document.getElementById('calload');
+				loadgif.style.top = t.toString()+"px"
+				loadgif.style.left = l.toString()+"px"
+				loadgif.style.width = w.toString()+"px"
+				loadgif.style.height = h.toString()+"px"
+				loadgif.style.display = "block"
+			}
+			window.location.href = "/istat/?trackval={{trackval}}&f="+from+"&t="+to
+		}
+	</script>
+	</body>
+</html>

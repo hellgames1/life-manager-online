@@ -159,9 +159,9 @@ def calendar(request):
                         elif typpe == 8 and value == "1":
                             value = "yes"
                         if i % 2 != 0:
-                            listvars += f"<tr><td>{name}: {value}</td>"
+                            listvars += f"<tr><td onclick=\"window.location.href='/cstat/?trackval={i}';\">{name}: {value}</td>"
                         else:
-                            listvars += f"<td>{name}: {value}</td></tr>"
+                            listvars += f"<td onclick=\"window.location.href='/cstat/?trackval={i}';\">{name}: {value}</td></tr>"
 
                     else:
                         break
@@ -176,6 +176,75 @@ def calendar(request):
         context["descr"]=selected
 
         return render(request, 'calendar.html', context)
+    else:
+        return redirect("/login")
+def calendar_stat(request):
+    if login_check(request):
+        if request.method == 'GET' and 'trackval' in request.GET:
+            now = datetime.now()
+            nowstr = now.strftime("%d%m%Y")
+            context = {}
+            months_verbose = ["error","January","February","March","April","May","June","July","August","September","October","November","December"]
+            days=[]
+            settingspointer = UserSettings.objects.all()[0].__dict__
+            context["tracking"]=settingspointer["val" + request.GET['trackval'] + "name"]
+            maximum = -1000000
+            minimum = 1000000
+
+            if "f" in request.GET:
+                firstset = True
+                firstday = Day.objects.filter(descr=request.GET['f'])[0].id
+                context["firstset"]=firstday
+            else:
+                firstset = False
+            for day in list(Day.objects.all()):
+                tval = day.__dict__["int" + request.GET['trackval']]
+                if tval > maximum:
+                    maximum = tval
+                if tval < minimum:
+                    minimum = tval
+                if day.descr == nowstr:
+                    break
+            for day in list(Day.objects.all()):
+                date = int(day.descr[:2])
+                month = int(day.descr[2:4])
+                month_verbose = months_verbose[month]
+                notes = day.notes
+                #year = int(day.descr[4:8])
+                tval = day.__dict__["int"+ request.GET['trackval']]
+                typpe = settingspointer["val" + request.GET['trackval'] + "type"]
+                if not firstset or day.id > firstday:
+                    clickable = True
+                else:
+                    clickable = False
+                prefix=""
+                if firstset and day.id == firstday:
+                    prefix="<"
+                if typpe == 1 or typpe == 2 or typpe == 5 or typpe == 8:
+                    value = f"{tval:.0f}"
+                elif typpe == 3 or typpe == 6:
+                    value = f"{tval:.1f}"
+                elif typpe == 4 or typpe == 7:
+                    value = f"{tval:.2f}"
+                if typpe == 8 and value == "0":
+                    value = "no"
+                elif typpe == 8 and value == "1":
+                    value = "yes"
+                tval-=minimum
+                if maximum - minimum == 0:
+                    tval = 255
+                else:
+                    tval = round(255 - (tval * (255 / (maximum-minimum))))
+                days.append({"descr": day.descr, "date": date, "month_verbose": month_verbose, "tval": tval, "show": value, "clickable": clickable, "id": day.id, "prefix": prefix})
+                if day.descr == nowstr:
+                    break
+            if request.method == 'GET' and 'y' in request.GET:
+                context["scrollto"]=request.GET['y']
+            context["days"]=days
+            context["trackval"]=request.GET['trackval']
+            return render(request, 'calendar_stat.html', context)
+        else:
+            return HttpResponse("invalid request!")
     else:
         return redirect("/login")
 def login(request):
