@@ -87,7 +87,7 @@ def mainview(request):
                     value = f"{value:.2f}"
                 if typpe == 3 or typpe == 4:
                     typpe = 2
-                elif typpe == 6 or typpe == 7:
+                elif typpe == 5 or typpe == 6 or typpe == 7:
                     typpe = 3
                 elif typpe == 8:
                     typpe = 4
@@ -105,6 +105,7 @@ def mainview(request):
         context["now"] = str(date) + " " + month_verbose
         context["descr"] = currentday
         context["options"] = options
+        print(options)
         context["jscheck"] = response
         if 'y' in request.GET:
             context["scrollto"]=request.GET['y']
