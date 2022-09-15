@@ -38,12 +38,13 @@ def change(request):
             y = request.GET['y']
             now = datetime.now()
             currentday = now.strftime("%d%m%Y")
-            keep = UserSettings.objects.all()[0].__dict__["val"+var+"keep"]
             daypointer = Day.objects.filter(descr=day)
             if var == "notez":
                 exec(f"daypointer.update(notes='{val}')")
+                keep = 0
             else:
                 exec(f"daypointer.update(int{var}={val})")
+                keep = UserSettings.objects.all()[0].__dict__["val"+var+"keep"]
             #print(Day.objects.filter(id__gt=2))
             print(f"Changed value of variable #{var} to \"{val}\" for day {day}")
             if keep == 1:
