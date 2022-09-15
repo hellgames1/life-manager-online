@@ -126,9 +126,9 @@
 			<div class="daysel"><a class="daytext" style="color:white;">{{day.date}}</a><br /><a class="daymonthtext" style="color:white;">{{day.month_verbose}}</a>
 			{% else %}
 			{% if day.today %}
-			<div class="daytoday" onclick="gotoday('{{day.descr}}', false);"><a class="daytext">{{day.date}}</a><br /><a class="daymonthtext">{{day.month_verbose}}</a>
+			<div class="daytoday" onclick="gotoday('{{day.descr}}', false,this);"><a class="daytext">{{day.date}}</a><br /><a class="daymonthtext">{{day.month_verbose}}</a>
 			{% else %}
-			<div class="day" onclick="gotoday('{{day.descr}}', true);"><a class="daytext">{{day.date}}</a><br /><a class="daymonthtext">{{day.month_verbose}}</a>
+			<div class="day" onclick="gotoday('{{day.descr}}', true,this);"><a class="daytext">{{day.date}}</a><br /><a class="daymonthtext">{{day.month_verbose}}</a>
 			{% endif %}
 			{% endif %}
 			{% if day.note %}
@@ -142,7 +142,10 @@
 		{% if scrollto %}
 		scroll_to_bottom.scrollTop = {{scrollto}};
 		{% endif %}
-		function gotoday(x,addday){
+		function gotoday(x,addday,th=0){
+			if (th!=0) {
+				th.style.backgroundColor = "rgb(255,127,127)";
+			}
 			if (addday) {
 				window.location.href = "/calendar/?calday="+x+"&y="+scroll_to_bottom.scrollTop.toString()
 			} else {
