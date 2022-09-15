@@ -105,7 +105,6 @@ def mainview(request):
         context["now"] = str(date) + " " + month_verbose
         context["descr"] = currentday
         context["options"] = options
-        print(options)
         context["jscheck"] = response
         if 'y' in request.GET:
             context["scrollto"]=request.GET['y']
