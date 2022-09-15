@@ -20,6 +20,8 @@ def image_stat(request):
         spacing = int(980/len(data))
         width = int(980/len(data)/2)
         height = 780/max(data)
+        offset = int(100+width/2)
+        print(width)
         lines = list(range(0,ceil(max(data))+1))
         while len(lines)>44:
             lines = lines[0::2]
@@ -41,14 +43,14 @@ def image_stat(request):
             draw.line((50, 880 - i * height, 1080,880 - i * height) , fill=(127, 127, 127), width=1)
             draw.text((40-font_small.getlength(str(i)), 870 - i * height), str(i),fill=(127, 127, 127), font=font_small)
         for i in range(len(data)):
-            draw.line((110+spacing*i, 880, 110+spacing*i, 880-data[i]*height), fill=(68, 114, 196), width=width)
+            draw.line((offset+spacing*i, 880, offset+spacing*i, 880-data[i]*height), fill=(68, 114, 196), width=width)
             txt = Image.new('RGB', usefont.getsize(titles[i]),(255,255,255))
             d = ImageDraw.Draw(txt)
             d.text((0, 0), titles[i], font=usefont, fill="black")
             w = txt.rotate(90, expand=1)
-            img.paste(w, (102+spacing*i, 900))
-        response = HttpResponse(content_type="image/jpeg")
-        img.save(response, "JPEG")
+            img.paste(w, (offset-8+spacing*i, 900))
+        response = HttpResponse(content_type="image/png")
+        img.save(response, "PNG")
         return response
     else:
         return HttpResponse("invalid request")
