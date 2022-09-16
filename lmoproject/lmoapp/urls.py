@@ -21,6 +21,7 @@ urlpatterns = [
     path('login/', views.login, name='login-page'),
     path('calendar/', views.calendar, name='calendar-page'),
     path('cstat/', views.calendar_stat, name='calendar-stats'),
+    path('vstat/', views.vimage_stat, name='view-image-stats'),
     path('istat/', draw_stat.image_stat, name='image-stats'),
     path('', views.mainview, name='main-page'),
     path('change/', views.change, name='change-page'),

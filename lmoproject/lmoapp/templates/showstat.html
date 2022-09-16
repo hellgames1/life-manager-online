@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+	<head>
+		<style type="text/css">
+			#header {
+				position: absolute;
+				top:0px;
+				left:0px;
+				width:100%;
+				background-color: gray;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>{% load static %}
+		<div id="header"><a style="color: white; font-family: Calibri; font-size: 36pt;">Stats</a></div>
+		<center>
+		<img src="/istat/?trackval={{trackval}}&f={{f}}&t={{t}}" style="width: 100%; left: 0px; top: 15%; position: absolute;" />
+		</center>
+		<a href="/calendar/" onclick="document.getElementById('xbutload').style.display='block';"><img src='{% static "x.png" %}' style="position: absolute; left: 0px; top: 90px; width: 180px;" /></a><img src='{% static "load.gif" %}' id="xbutload" style="display: none; position: absolute; left: 0px; top: 90px; width: 180px;" />
+		<a href="/istat/?trackval={{trackval}}&f={{f}}&t={{t}}" download><img src='{% static "d.png" %}' style="position: absolute; right: 0px; top: 90px; width: 180px;" /></a>
+		
+	</body>
+</html>

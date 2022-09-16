@@ -254,3 +254,13 @@ def login(request):
         return redirect("/")
     else:
         return render(request,'login.html')
+
+def vimage_stat(request):
+    if login_check(request):
+        if request.method == "GET" and "trackval" in request.GET and "f" in request.GET and "t" in request.GET:
+            context = {"trackval": request.GET['trackval'], "f": request.GET['f'], "t": request.GET['t']}
+            return render(request, 'showstat.html', context)
+        else:
+            return HttpResponse("invalid request!")
+    else:
+        return redirect("/login")
